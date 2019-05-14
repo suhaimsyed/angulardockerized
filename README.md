@@ -25,3 +25,51 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+## To dockerize applicatation
+
+A docker file was added 
+
+```
+# base image
+FROM node:9.6.1
+
+
+# set working directory
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+
+# add `/usr/src/app/node_modules/.bin` to $PATH
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+# install and cache app dependencies
+COPY package.json /usr/src/app/package.json
+RUN npm install
+RUN npm install -g @angular/cli@7.3.9
+
+# add app
+COPY . /usr/src/app
+
+# start app
+CMD ng serve --host 0.0.0.0
+```
+
+Docker compose file for the same looks as below
+
+```
+version: '3.5'
+
+services:
+
+  sampleangular7:
+    container_name: sampleangular7
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - '.:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - '4200:4200'
+```
