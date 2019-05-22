@@ -55,6 +55,11 @@ COPY . /usr/src/app
 CMD ng serve --host 0.0.0.0
 ```
 
+To build the image run at the root folder
+```
+docker build -t imagesname .
+```
+
 Docker compose file for the same looks as below
 
 ```
